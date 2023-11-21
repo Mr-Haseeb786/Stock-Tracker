@@ -1,7 +1,7 @@
 import React from "react";
 import Navbar from "../Components/Navbar";
 import { Outlet } from "react-router-dom";
-import Footer from "../Components/Footer";
+import BottomNav from "../Components/BottomNav";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 const Layout = () => {
@@ -9,7 +9,7 @@ const Layout = () => {
     <main>
       <Navbar />
       <Outlet />
-      <Footer />
+      <BottomNav />
       <ReactQueryDevtools />
     </main>
   );
