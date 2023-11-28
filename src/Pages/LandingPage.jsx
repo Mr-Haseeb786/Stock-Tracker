@@ -1,7 +1,6 @@
 import React, { useEffect } from "react";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
-
 import GraphCard from "../Components/GraphCard";
 // ========= Material UI Components ===========
 import {
@@ -11,7 +10,10 @@ import {
   TextField,
   Grid,
   CardContent,
+  Button,
 } from "@mui/material/";
+// =========== Material UI Icons ============
+import SearchIcon from "@mui/icons-material/Search";
 
 const API_KEY = "P8B09WZPIUEJ3KSR";
 const company = "IBM";
@@ -37,10 +39,14 @@ const LandingPage = () => {
   }
 
   if (stockQuery.isError) {
+    console.log(stockQuery.error.message);
+
     return <Typography variant='h3'>{stockQuery.error.message}</Typography>;
   }
 
   const stockData = stockQuery.data.data;
+
+  console.log(stockData);
 
   for (let key in stockData["Time Series (Daily)"]) {
     stockInfo.push(stockData["Time Series (Daily)"][key]["4. close"]);
@@ -51,17 +57,42 @@ const LandingPage = () => {
   return (
     <Container>
       <section className='home-body'>
-        <TextField label='Enter Stock Tiker' variant='outlined' />
+        <Grid
+          container
+          gap={"1rem"}
+          justifyContent={"center"}
+          alignItems={"center"}
+        >
+          <Grid item>
+            <TextField label='Enter Stock Tiker' variant='outlined' />
+          </Grid>
+          <Grid item xs={1}>
+            <Button variant='contained'>
+              <SearchIcon />
+            </Button>
+          </Grid>
+        </Grid>
 
         <GraphCard />
+
+        <div className='separater'></div>
+
+        {/* Favourites Section */}
+
+        <article>
+          <Typography
+            variant='h4'
+            textAlign={"center"}
+            marginTop={"2rem"}
+            sx={{ opacity: "0.35" }}
+          >
+            Your Favourites
+          </Typography>
+          <GraphCard />
+        </article>
+
+        {/* End of Favourites Section */}
       </section>
-      {/* search section */}
-
-      {/* graph section */}
-      {/* end of graph section */}
-
-      {/* fav stocks section */}
-      {/* end of fav stocks section */}
     </Container>
   );
 };

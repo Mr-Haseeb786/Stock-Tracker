@@ -1,7 +1,8 @@
 import React from "react";
+import GraphCard from "../Components/GraphCard";
 
 const AboutPage = () => {
-  return <div>AboutPage</div>;
+  return <main></main>;
 };
 
 export default AboutPage;
