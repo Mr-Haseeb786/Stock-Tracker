@@ -1,7 +1,10 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
 import GraphCard from "../Components/GraphCard";
+import { useSelector } from "react-redux/es/hooks/useSelector";
+import useDataFetch from "../Hooks/useDataFetch";
+
 // ========= Material UI Components ===========
 import {
   Card,
@@ -14,25 +17,19 @@ import {
 } from "@mui/material/";
 // =========== Material UI Icons ============
 import SearchIcon from "@mui/icons-material/Search";
-
-const API_KEY = "P8B09WZPIUEJ3KSR";
-const company = "IBM";
-const API_URL = `https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=IBM&apikey=${API_KEY}`;
-
-const useStockQuery = () => {
-  return useQuery({
-    queryKey: ["dailyStocks"],
-    queryFn: async () => {
-      const resp = await axios.get(API_URL);
-      return resp;
-    },
-  });
-};
+import TickerSearch from "../Components/TickerSearch";
 
 const LandingPage = () => {
+  const { ticker } = useSelector((store) => store.stock);
+
   let stockInfo = [];
 
-  const stockQuery = useStockQuery();
+  // const stockQuery = useDataFetch();
+  const stockQuery = useDataFetch();
+
+  useEffect(() => {
+    stockQuery.refetch();
+  }, [ticker]);
 
   if (stockQuery.isLoading) {
     return <Typography variant='h3'>Loading...</Typography>;
@@ -57,21 +54,7 @@ const LandingPage = () => {
   return (
     <Container>
       <section className='home-body'>
-        <Grid
-          container
-          gap={"1rem"}
-          justifyContent={"center"}
-          alignItems={"center"}
-        >
-          <Grid item>
-            <TextField label='Enter Stock Tiker' variant='outlined' />
-          </Grid>
-          <Grid item xs={1}>
-            <Button variant='contained'>
-              <SearchIcon />
-            </Button>
-          </Grid>
-        </Grid>
+        <TickerSearch />
 
         <GraphCard />
 
@@ -79,7 +62,7 @@ const LandingPage = () => {
 
         {/* Favourites Section */}
 
-        <article>
+        <article className='fav-stock-section'>
           <Typography
             variant='h4'
             textAlign={"center"}
@@ -88,7 +71,7 @@ const LandingPage = () => {
           >
             Your Favourites
           </Typography>
-          <GraphCard />
+          {/* <GraphCard /> */}
         </article>
 
         {/* End of Favourites Section */}
